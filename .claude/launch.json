@@ -1,0 +1,20 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "recap-client",
+      "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
+      "runtimeArgs": [
+        "C:\\Users\\s938OldDotNet\\Desktop\\CAPCAT VIDEOS\\recap-v3-PACKAGE\\recap-v3\\client\\node_modules\\vite\\bin\\vite.js",
+        "C:\\Users\\s938OldDotNet\\Desktop\\CAPCAT VIDEOS\\recap-v3-PACKAGE\\recap-v3\\client",
+        "--config",
+        "C:\\Users\\s938OldDotNet\\Desktop\\CAPCAT VIDEOS\\recap-v3-PACKAGE\\recap-v3\\client\\vite.config.js",
+        "--port",
+        "5199",
+        "--strictPort"
+      ],
+      "port": 5199,
+      "autoPort": false
+    }
+  ]
+}

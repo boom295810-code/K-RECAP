@@ -7,6 +7,12 @@ rem ============================================================
 title K RECAP link - keep this window open
 cd /d "%~dp0recap-v3\server"
 
+rem 0. First run: install the server packages (needs internet once).
+if not exist node_modules (
+  echo Installing K RECAP packages, please wait...
+  call npm.cmd install
+)
+
 rem 1. Server: start it in its own window unless it's already running.
 netstat -ano | findstr /r /c:":5002 .*LISTENING" >nul
 if errorlevel 1 (

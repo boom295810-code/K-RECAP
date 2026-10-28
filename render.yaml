@@ -1,0 +1,15 @@
+# One-click hosting on Render (free plan) so K RECAP can be used from a phone browser.
+services:
+  - type: web
+    name: k-recap
+    runtime: node
+    plan: free
+    rootDir: recap-v3/server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      # Password people must type to open the site (asked during setup).
+      - key: APP_PASSWORD
+        sync: false

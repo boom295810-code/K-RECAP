@@ -1,0 +1,21 @@
+{
+  "name": "k-recap-server",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "description": "K RECAP - Chinese drama to Myanmar dubbing tool",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "ffmpeg-static": "^5.2.0",
+    "ffprobe-static": "^3.1.0",
+    "msedge-tts": "^2.1.1",
+    "multer": "^2.0.2"
+  }
+}

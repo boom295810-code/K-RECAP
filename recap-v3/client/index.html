@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="my">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>K RECAP</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a href="#" class="brand" id="homeLink">K <b>RECAP</b> <small>Chinese Drama → မြန်မာ Dubbing</small></a>
+    <button id="openSettings" class="btn">⚙️ API Keys / Settings</button>
+  </header>
+
+  <main id="home" class="page">
+    <section class="card upload" id="dropZone">
+      <h2>🎬 Chinese AI Drama ဗီဒီယို ထည့်ပါ</h2>
+      <p class="muted">ထည့်လိုက်တာနဲ့ အလိုအလျောက် — စာသားထုတ် (AssemblyAI) → မြန်မာဘာသာပြန် (Gemini) → အသံထုတ် → မူရင်းစကားပြောနဲ့ ညှိ → Video ထွက်</p>
+      <label class="btn primary big">
+        ဗီဒီယို ရွေးရန် / ဒီမှာ ဆွဲချပါ
+        <input type="file" id="fileInput" accept="video/*,.mkv" hidden />
+      </label>
+      <div id="uploadStatus" class="muted"></div>
+      <div id="keyWarning" class="warn hidden">⚠️ AssemblyAI နှင့် Gemini API key မထည့်ရသေးပါ — <a href="#" id="warnOpenSettings">Settings ဖွင့်ပါ</a></div>
+    </section>
+
+    <section class="card">
+      <h3>📁 Project များ</h3>
+      <div id="projectList" class="project-list"></div>
+    </section>
+  </main>
+
+  <main id="editor" class="page hidden">
+    <section class="card pipeline">
+      <div class="pipe-head">
+        <h3 id="projName"></h3>
+        <div class="pipe-actions">
+          <a id="dlVideo" class="btn primary" download>⬇️ MP4</a>
+          <a id="dlSrt" class="btn">⬇️ မြန်မာ SRT</a>
+          <a id="dlSrtZh" class="btn">⬇️ တရုတ် SRT</a>
+        </div>
+      </div>
+      <ol class="steps" id="steps"></ol>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="statusMsg" class="muted"></div>
+      <div id="errorMsg" class="error hidden"></div>
+    </section>
+
+    <div class="workspace">
+      <section class="card player">
+        <div class="tabs">
+          <button class="tab active" data-src="output">🔊 မြန်မာ Output</button>
+          <button class="tab" data-src="input">🇨🇳 မူရင်း</button>
+        </div>
+        <div class="video-wrap">
+          <video id="video" controls playsinline></video>
+          <div id="subOverlay" class="sub-overlay"></div>
+        </div>
+        <div class="render-box">
+          <h4>🎚 ရောစပ်ခြင်း</h4>
+          <label>မူရင်းအသံ ပမာဏ <input type="range" id="origVolume" min="0" max="1" step="0.05" /> <span id="origVolumeVal"></span></label>
+          <label>အမြင့်ဆုံး အမြန်နှုန်း (စာရှည်ရင် ဒီထိ မြန်စေမယ်) <input type="range" id="maxSpeed" min="1" max="2.5" step="0.05" /> <span id="maxSpeedVal"></span></label>
+          <label>အသံ အမြန်နှုန်း (TTS rate %) <input type="number" id="rate" min="-50" max="100" step="5" /></label>
+          <label class="check"><input type="checkbox" id="burnSubs" /> မြန်မာ စာတန်းထိုး video ထဲ ထည့်မည် (Myanmar Text font)</label>
+          <label>Default အသံ <select id="voice"></select></label>
+          <div id="speakerVoices"></div>
+          <div class="row">
+            <button id="renderBtn" class="btn primary">🎬 ပြင်ထားတာတွေ အသံပြန်ထုတ်ပြီး Video ထုတ်</button>
+          </div>
+          <div class="row">
+            <button id="revoiceAllBtn" class="btn">🎙 အသံ အားလုံး ပြန်ထုတ်</button>
+            <button id="retranslateBtn" class="btn">🌐 အားလုံး ပြန်ဘာသာပြန်</button>
+            <button id="retranscribeBtn" class="btn danger">📝 စာသား ပြန်ထုတ်</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card segments">
+        <div class="seg-head">
+          <h3>✏️ စကားပြော တည်းဖြတ်ရန် <span id="segCount" class="muted"></span></h3>
+          <div class="seg-tools">
+            <span id="saveState" class="muted"></span>
+            <label class="check"><input type="checkbox" id="onlyWarn" /> ⚠️ မကိုက်တာပဲ ပြ</label>
+          </div>
+        </div>
+        <p class="muted small">⚠️ အနီပြတာ = မြန်မာစာ ရှည်လို့ မူရင်းအချိန်ထဲ မဆံ့ — စာတိုအောင်ပြင်ပြီး 🎙 နှိပ်ပါ။ အချိန်ကို နှိပ်ရင် ဗီဒီယို အဲ့နေရာ သွားမယ်။</p>
+        <div id="segList" class="seg-list"></div>
+      </section>
+    </div>
+  </main>
+
+  <dialog id="settingsDlg">
+    <form method="dialog" class="settings">
+      <h2>⚙️ API Keys / Settings</h2>
+      <p class="muted small">Key တွေကို ဒီ browser ထဲမှာပဲ သိမ်းထားပါတယ် (server မှာ မသိမ်းပါ)။</p>
+
+      <label>AssemblyAI API Key <a href="https://www.assemblyai.com/dashboard/api-keys" target="_blank" rel="noopener">(key ယူရန်)</a>
+        <div class="key-row"><input type="password" id="assemblyKey" autocomplete="off" placeholder="AssemblyAI key ထည့်ပါ" /><button type="button" class="btn eye" data-for="assemblyKey">👁</button></div>
+      </label>
+      <label>Gemini API Key <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">(key ယူရန်)</a>
+        <div class="key-row"><input type="password" id="geminiKey" autocomplete="off" placeholder="Gemini key ထည့်ပါ" /><button type="button" class="btn eye" data-for="geminiKey">👁</button></div>
+      </label>
+
+      <div class="grid2">
+        <label>မူရင်း ဘာသာစကား
+          <select id="sLanguage">
+            <option value="zh">တရုတ် (Chinese)</option>
+            <option value="auto">Auto detect</option>
+            <option value="ko">ကိုရီးယား</option>
+            <option value="ja">ဂျပန်</option>
+            <option value="en">English</option>
+          </select>
+        </label>
+        <label>Gemini ဘာသာပြန် model
+          <input id="sGeminiModel" list="geminiModels" />
+          <datalist id="geminiModels">
+            <option value="gemini-2.5-flash"></option>
+            <option value="gemini-2.5-pro"></option>
+            <option value="gemini-2.5-flash-lite"></option>
+          </datalist>
+        </label>
+        <label>Default အသံ <select id="sVoice"></select></label>
+        <label>Gemini TTS model <input id="sGeminiTtsModel" /></label>
+      </div>
+      <label class="check"><input type="checkbox" id="sSpeakers" /> ပြောသူ ခွဲခြားမည် (Speaker A/B/C — တစ်ယောက်ချင်း အသံ ခွဲပေးလို့ရ)</label>
+
+      <div class="row end">
+        <button value="cancel" class="btn">ပိတ်</button>
+        <button id="saveSettings" value="default" class="btn primary">💾 သိမ်းမည်</button>
+      </div>
+    </form>
+  </dialog>
+
+  <audio id="clipPlayer"></audio>
+  <script src="app.js"></script>
+</body>
+</html>

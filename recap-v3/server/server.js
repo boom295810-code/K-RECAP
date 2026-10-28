@@ -17,6 +17,15 @@ const PORT = Number(process.env.PORT) || 5002;
 const app = express();
 const upload = multer({ dest: path.join(os.tmpdir(), "k-recap-uploads"), limits: { fileSize: 4 * 1024 ** 3 } });
 
+// Optional password for hosted use (Render etc.): the browser shows its own login box.
+if (process.env.APP_PASSWORD) {
+  app.use((req, res, next) => {
+    const [, b64 = ""] = (req.get("authorization") || "").split(" ");
+    const pass = Buffer.from(b64, "base64").toString().split(":").slice(1).join(":");
+    if (pass === process.env.APP_PASSWORD) return next();
+    res.set("WWW-Authenticate", 'Basic realm="K RECAP"').status(401).send("Password required");
+  });
+}
 app.use(express.json({ limit: "20mb" }));
 app.use(express.static(path.join(here, "..", "client")));
 app.use("/files", express.static(path.join(DATA_DIR, "projects"), { dotfiles: "deny" }));

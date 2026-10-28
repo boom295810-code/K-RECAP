@@ -27,3 +27,10 @@ npm install
 npm start                # http://localhost:5002
 ```
 Node.js 18+ လိုပါတယ်။ ffmpeg ကို package နဲ့အတူ ပါပြီးသား။ Project ဖိုင်တွေ `recap-v3/server/data/` မှာ သိမ်းတယ်။
+
+## ဖုန်းကနေ သုံးရန် (Render free hosting)
+1. GitHub မှာ PR ကို merge လုပ်ပါ (`render.yaml` က main branch ပေါ်ရောက်ဖို့)။
+2. https://render.com/deploy?repo=https://github.com/boom295810-code/K-RECAP ကိုဖွင့် → GitHub နဲ့ sign in → `APP_PASSWORD` မှာ ကိုယ်ပိုင် password ထည့် → **Apply**။
+3. ၅-၁၀ မိနစ်လောက်နေရင် `https://k-recap-xxxx.onrender.com` link ရပါမယ်။ ဖုန်း browser နဲ့ဖွင့်ပြီး password ရိုက်ထည့်ပါ (username က ဘာရိုက်ရိုက်ရ)။
+
+Free plan မှတ်ချက်: RAM 512MB ဖြစ်လို့ မိနစ် ၁၀ အောက် video တွေ သင့်တော်တယ်။ ၁၅ မိနစ် မသုံးရင် အိပ်သွားပြီး ပြန်ဖွင့်ရင် ၁ မိနစ်လောက် စောင့်ရတယ်။ Server restart ဖြစ်ရင် project ဟောင်းတွေ ပျက်တယ် (MP4 ကို ပြီးတာနဲ့ ဒေါင်းထားပါ)။
